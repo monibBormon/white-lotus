@@ -62,13 +62,16 @@ function BookingForm() {
       sessionStorage.setItem("bookingDetails", JSON.stringify(bookingData));
 
       // Create a checkout session and redirect to Stripe
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/create-checkout-session}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/create-checkout-session`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(bookingData),
         },
-        body: JSON.stringify(bookingData),
-      });
+      );
 
       const { sessionUrl } = await response.json();
 
