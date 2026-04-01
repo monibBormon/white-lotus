@@ -26,7 +26,7 @@ function ProductsPage() {
       details: [
         "The Tantric Hawan is an ancient and deeply sacred fire ritual where powerful mantras and divine offerings are made into the holy fire, awakening potent spiritual energies.",
         "When combined with deep healing practices, this ceremony becomes incredibly powerful, clearing heavy energies, releasing deep blockages, and activating profound healing on an energetic and spiritual level.",
-        "The sacred fire amplifies intentions, purifies the energy field, and opens the path for transformation, protection, and abundance.",
+        "The sacred fire amplifies intentions, purifies the energy field, and opens the path for transformation, protection, and abundance.","This process unlocks profound insight while effortlessly dissolving energetic blockages at their core. When practiced with intention and precision, it becomes a powerful catalyst for deep, transformative healing realigning, restoring, and harmonizing every dimension of your being.",
         "A powerful experience for those ready to cleanse, heal, and step into a higher vibration.",
       ],
     },
@@ -70,7 +70,7 @@ function ProductsPage() {
                     </p>
                   )}
                   <div className="text-2xl md:text-3xl font-bold text-primary mb-4">
-                    {product.price}
+                    {product.price} <del>£150</del>
                   </div>
 
                   <p className="text-stone-700 dark:text-gray-300 mb-6 leading-relaxed">
@@ -106,7 +106,7 @@ function ProductsPage() {
                     to="/book-now"
                     className="inline-block bg-primary hover:bg-pink-400 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 text-center w-full"
                   >
-                    Let's Get Started
+                    Book Now
                   </Link>
                 </div>
               </div>

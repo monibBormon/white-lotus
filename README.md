@@ -1,16 +1,21 @@
-# React + Vite
+1. Any Queries it will cost 0 
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+When user click on Date  - it should also select UK time 
 
-Currently, two official plugins are available:
+If user click Tantric dropdown  - 
+What they want healing - 
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## React Compiler
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+One on one session - Products - 150
+2nd bullet point -  soul's akashic records
+
+Tantric Prodcuts - last bullet need to replace -200
+- This process unlocks profound insight while effortlessly dissolving energetic blockages at their core. When practiced with intention and precision, it becomes a powerful catalyst for deep, transformative healing realigning, restoring, and harmonizing every dimension of your being.
+
+
+
+Hero banner need height little bit smaller
