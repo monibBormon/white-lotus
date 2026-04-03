@@ -1,15 +1,57 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import Layout from "../components/shared/layout";
 
 function TestimonialsPage() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [testimonials, setTestimonials] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
-    title: "",
-    quote: "",
+    profession: "",
+    review: "",
   });
+
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  const fetchTestimonials = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`${API_URL}/api/testimonials`);
+      if (!response.ok) throw new Error("Failed to fetch testimonials");
+      const data = await response.json();
+      // Map the data to include rating and color
+      const colors = [
+        "from-purple-500 to-pink-500",
+        "from-blue-500 to-cyan-500",
+        "from-emerald-500 to-teal-500",
+        "from-orange-500 to-red-500",
+        "from-rose-500 to-pink-500",
+        "from-violet-500 to-purple-500",
+      ];
+      const mappedData = data.map((item, index) => ({
+        ...item,
+        title: item.profession, // for compatibility
+        quote: item.review,
+        rating: 5,
+        color: colors[index % colors.length],
+      }));
+      setTestimonials(mappedData);
+      setError(null);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTestimonials();
+  }, [API_URL]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -19,72 +61,32 @@ function TestimonialsPage() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you would typically send the data to a server
-    console.log("Review submitted:", formData);
-    alert(
-      "Thank you for your review! It will be reviewed before being published.",
-    );
-    setFormData({ name: "", title: "", quote: "" });
+    setSubmitting(true);
+    setError(null);
+    try {
+      const response = await fetch(`${API_URL}/api/testimonials`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      if (!response.ok) throw new Error("Failed to submit testimonial");
+      setSuccessMessage(
+        "Thank you for your review! It will be reviewed before being published.",
+      );
+      setFormData({ name: "", profession: "", review: "" });
+      // Re-fetch testimonials
+      await fetchTestimonials();
+      setTimeout(() => setSuccessMessage(""), 10000);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSubmitting(false);
+    }
   };
-
-  const testimonials = [
-    {
-      id: 1,
-      name: "Sarah Johnson",
-      title: "Entrepreneur",
-      quote:
-        "Working with Simran transformed how I view my career. I felt a weight lift immediately after our first session. Her energy healing work is truly profound and life-changing.",
-      rating: 5,
-      color: "from-purple-500 to-pink-500",
-    },
-    {
-      id: 2,
-      name: "Michael Chen",
-      title: "Healthcare Professional",
-      quote:
-        "The Theta Healing sessions with Simran helped me release years of stored trauma. I've never experienced such deep healing work. Highly recommended to anyone seeking real transformation.",
-      rating: 5,
-      color: "from-blue-500 to-cyan-500",
-    },
-    {
-      id: 3,
-      name: "Emma Williams",
-      title: "Creative Director",
-      quote:
-        "Simran's intuitive readings are incredibly accurate. She identified blockages I didn't even know I had. After her Vortex Healing work, I feel reconnected to my purpose.",
-      rating: 5,
-      color: "from-emerald-500 to-teal-500",
-    },
-    {
-      id: 4,
-      name: "David Martinez",
-      title: "Life Coach",
-      quote:
-        "The Spiritual Response Therapy sessions cleared so many hidden blocks that were preventing my growth. Simran's work is backed by genuine spiritual knowledge and divine grace.",
-      rating: 5,
-      color: "from-orange-500 to-red-500",
-    },
-    {
-      id: 5,
-      name: "Jessica Lee",
-      title: "Wellness Consultant",
-      quote:
-        "I came for healing and left with profound spiritual awakening. Simran's Integrating Divine Union modality helped me heal my relationship patterns at the deepest level.",
-      rating: 5,
-      color: "from-rose-500 to-pink-500",
-    },
-    {
-      id: 6,
-      name: "Robert Thompson",
-      title: "Business Executive",
-      quote:
-        "Simran's energy work is unmatched. The combination of multiple healing modalities she uses creates a comprehensive healing experience. Life-changing is an understatement.",
-      rating: 5,
-      color: "from-violet-500 to-purple-500",
-    },
-  ];
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % testimonials.length);
@@ -105,10 +107,12 @@ function TestimonialsPage() {
   };
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % testimonials.length);
-    }, 5000);
-    return () => clearInterval(interval);
+    if (testimonials.length > 0) {
+      const interval = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % testimonials.length);
+      }, 5000);
+      return () => clearInterval(interval);
+    }
   }, [testimonials.length]);
 
   return (
@@ -129,131 +133,147 @@ function TestimonialsPage() {
               </div>
               {/* Slider Container */}
               <div className="relative">
-                {/* Slides Grid */}
-                <div className="grid md:grid-cols-3 gap-8 mb-12">
-                  {getVisibleSlides().map((testimonial, index) => (
-                    <div
-                      key={testimonial.id}
-                      className={`transform transition-all duration-500 ease-out ${
-                        index === 1
-                          ? "md:scale-105 md:z-10"
-                          : "md:scale-95 opacity-60 hidden md:block"
-                      }`}
-                    >
-                      <div className="group relative bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-white/20 overflow-hidden min-h-96 flex flex-col">
-                        {/* Gradient Border Effect */}
+                {loading ? (
+                  <div className="text-center py-12">
+                    <p className="text-stone-600">Loading testimonials...</p>
+                  </div>
+                ) : error ? (
+                  <div className="text-center py-12">
+                    <p className="text-red-600">Error: {error}</p>
+                  </div>
+                ) : testimonials.length === 0 ? (
+                  <div className="text-center py-12">
+                    <p className="text-stone-600">0 testimonial found.</p>
+                  </div>
+                ) : (
+                  <>
+                    {/* Slides Grid */}
+                    <div className="grid md:grid-cols-3 gap-8 mb-12">
+                      {getVisibleSlides().map((testimonial, index) => (
                         <div
-                          className={`absolute inset-0 bg-linear-to-br ${testimonial.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300 rounded-2xl`}
+                          key={testimonial.id}
+                          className={`transform transition-all duration-500 ease-out ${
+                            index === 1
+                              ? "md:scale-105 md:z-10"
+                              : "md:scale-95 opacity-60 hidden md:block"
+                          }`}
+                        >
+                          <div className="group relative bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-white/20 overflow-hidden min-h-96 flex flex-col">
+                            {/* Gradient Border Effect */}
+                            <div
+                              className={`absolute inset-0 bg-linear-to-br ${testimonial.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300 rounded-2xl`}
+                            ></div>
+
+                            {/* Top Gradient Bar */}
+                            <div
+                              className={`absolute top-0 left-0 right-0 h-1 bg-linear-to-r ${testimonial.color}`}
+                            ></div>
+
+                            {/* Content */}
+                            <div className="relative z-10 flex flex-col h-full">
+                              {/* Quote */}
+                              <p className="text-slate-700 leading-relaxed grow mb-6 italic">
+                                "{testimonial.quote}"
+                              </p>
+
+                              {/* Divider */}
+                              <div className="w-12 h-1 bg-linear-to-r from-slate-300 to-transparent mb-6"></div>
+
+                              {/* Author Info */}
+                              <div>
+                                <div
+                                  className={`w-12 h-12 rounded-full bg-linear-to-br ${testimonial.color} flex items-center justify-center text-white font-semibold mb-3`}
+                                >
+                                  {testimonial.name.charAt(0)}
+                                </div>
+                                <h4 className="text-lg font-semibold text-slate-800">
+                                  {testimonial.name}
+                                </h4>
+                                <p className="text-sm text-slate-600">
+                                  {testimonial.title}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Mobile Slider View */}
+                    <div className="md:hidden mb-12">
+                      <div className="relative bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/20 overflow-hidden min-h-80">
+                        <div
+                          className={`absolute inset-0 bg-linear-to-br ${testimonials[currentSlide].color} opacity-5`}
+                        ></div>
+                        <div
+                          className={`absolute top-0 left-0 right-0 h-1 bg-linear-to-r ${testimonials[currentSlide].color}`}
                         ></div>
 
-                        {/* Top Gradient Bar */}
-                        <div
-                          className={`absolute top-0 left-0 right-0 h-1 bg-linear-to-r ${testimonial.color}`}
-                        ></div>
-
-                        {/* Content */}
-                        <div className="relative z-10 flex flex-col h-full">
-                          {/* Quote */}
-                          <p className="text-slate-700 leading-relaxed grow mb-6 italic">
-                            "{testimonial.quote}"
+                        <div className="relative z-10">
+                          <p className="text-slate-700 leading-relaxed mb-6 italic">
+                            "{testimonials[currentSlide].quote}"
                           </p>
 
-                          {/* Divider */}
                           <div className="w-12 h-1 bg-linear-to-r from-slate-300 to-transparent mb-6"></div>
 
-                          {/* Author Info */}
                           <div>
                             <div
-                              className={`w-12 h-12 rounded-full bg-linear-to-br ${testimonial.color} flex items-center justify-center text-white font-semibold mb-3`}
+                              className={`w-12 h-12 rounded-full bg-linear-to-br ${testimonials[currentSlide].color} flex items-center justify-center text-white font-semibold mb-3`}
                             >
-                              {testimonial.name.charAt(0)}
+                              {testimonials[currentSlide].name.charAt(0)}
                             </div>
                             <h4 className="text-lg font-semibold text-slate-800">
-                              {testimonial.name}
+                              {testimonials[currentSlide].name}
                             </h4>
                             <p className="text-sm text-slate-600">
-                              {testimonial.title}
+                              {testimonials[currentSlide].title}
                             </p>
                           </div>
                         </div>
                       </div>
                     </div>
-                  ))}
-                </div>
 
-                {/* Mobile Slider View */}
-                <div className="md:hidden mb-12">
-                  <div className="relative bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/20 overflow-hidden min-h-80">
-                    <div
-                      className={`absolute inset-0 bg-linear-to-br ${testimonials[currentSlide].color} opacity-5`}
-                    ></div>
-                    <div
-                      className={`absolute top-0 left-0 right-0 h-1 bg-linear-to-r ${testimonials[currentSlide].color}`}
-                    ></div>
+                    {/* Navigation Controls */}
+                    <div className="flex items-center justify-center gap-6 mb-8">
+                      <button
+                        onClick={prevSlide}
+                        className="group relative p-3 rounded-full bg-primary text-white shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300"
+                      >
+                        <ChevronLeft size={24} />
+                        <div className="absolute inset-0 rounded-full bg-white/0 group-hover:bg-white/20 transition-all duration-300"></div>
+                      </button>
 
-                    <div className="relative z-10">
-                      <p className="text-slate-700 leading-relaxed mb-6 italic">
-                        "{testimonials[currentSlide].quote}"
-                      </p>
-
-                      <div className="w-12 h-1 bg-linear-to-r from-slate-300 to-transparent mb-6"></div>
-
-                      <div>
-                        <div
-                          className={`w-12 h-12 rounded-full bg-linear-to-br ${testimonials[currentSlide].color} flex items-center justify-center text-white font-semibold mb-3`}
-                        >
-                          {testimonials[currentSlide].name.charAt(0)}
-                        </div>
-                        <h4 className="text-lg font-semibold text-slate-800">
-                          {testimonials[currentSlide].name}
-                        </h4>
-                        <p className="text-sm text-slate-600">
-                          {testimonials[currentSlide].title}
+                      <div className="text-center">
+                        <p className="text-slate-600 font-medium">
+                          {currentSlide + 1} / {testimonials.length}
                         </p>
                       </div>
+
+                      <button
+                        onClick={nextSlide}
+                        className="group relative p-3 rounded-full bg-primary text-white shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300"
+                      >
+                        <ChevronRight size={24} />
+                        <div className="absolute inset-0 rounded-full bg-white/0 group-hover:bg-white/20 transition-all duration-300"></div>
+                      </button>
                     </div>
-                  </div>
-                </div>
 
-                {/* Navigation Controls */}
-                <div className="flex items-center justify-center gap-6 mb-8">
-                  <button
-                    onClick={prevSlide}
-                    className="group relative p-3 rounded-full bg-primary text-white shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300"
-                  >
-                    <ChevronLeft size={24} />
-                    <div className="absolute inset-0 rounded-full bg-white/0 group-hover:bg-white/20 transition-all duration-300"></div>
-                  </button>
-
-                  <div className="text-center">
-                    <p className="text-slate-600 font-medium">
-                      {currentSlide + 1} / {testimonials.length}
-                    </p>
-                  </div>
-
-                  <button
-                    onClick={nextSlide}
-                    className="group relative p-3 rounded-full bg-primary text-white shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300"
-                  >
-                    <ChevronRight size={24} />
-                    <div className="absolute inset-0 rounded-full bg-white/0 group-hover:bg-white/20 transition-all duration-300"></div>
-                  </button>
-                </div>
-
-                {/* Dots Indicator */}
-                <div className="flex justify-center gap-3 flex-wrap">
-                  {testimonials.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setCurrentSlide(index)}
-                      className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                        index === currentSlide
-                          ? "bg-primary w-8"
-                          : "bg-stone-300 hover:bg-stone-400"
-                      }`}
-                    />
-                  ))}
-                </div>
+                    {/* Dots Indicator */}
+                    <div className="flex justify-center gap-3 flex-wrap">
+                      {testimonials.map((_, index) => (
+                        <button
+                          key={index}
+                          onClick={() => setCurrentSlide(index)}
+                          className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                            index === currentSlide
+                              ? "bg-primary w-8"
+                              : "bg-stone-300 hover:bg-stone-400"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* Review Form Section */}
@@ -294,16 +314,16 @@ function TestimonialsPage() {
                       </div>
                       <div>
                         <label
-                          htmlFor="title"
+                          htmlFor="profession"
                           className="block text-sm font-medium text-stone-700 mb-2"
                         >
-                          Your Title/Profession
+                          Your Profession
                         </label>
                         <input
                           type="text"
-                          id="title"
-                          name="title"
-                          value={formData.title}
+                          id="profession"
+                          name="profession"
+                          value={formData.profession}
                           onChange={handleInputChange}
                           required
                           className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
@@ -312,15 +332,15 @@ function TestimonialsPage() {
                       </div>
                       <div>
                         <label
-                          htmlFor="quote"
+                          htmlFor="review"
                           className="block text-sm font-medium text-stone-700 mb-2"
                         >
                           Your Testimonial
                         </label>
                         <textarea
-                          id="quote"
-                          name="quote"
-                          value={formData.quote}
+                          id="review"
+                          name="review"
+                          value={formData.review}
                           onChange={handleInputChange}
                           required
                           rows={4}
@@ -330,10 +350,23 @@ function TestimonialsPage() {
                       </div>
                       <button
                         type="submit"
-                        className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105"
+                        disabled={submitting}
+                        className="w-full bg-primary hover:bg-primary/90 disabled:bg-primary/70 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 disabled:hover:scale-100 flex items-center justify-center gap-2"
                       >
-                        Submit Your Review
+                        {submitting ? (
+                          <>
+                            <Loader2 className="animate-spin" size={20} />
+                            Submitting...
+                          </>
+                        ) : (
+                          "Submit Your Review"
+                        )}
                       </button>
+                      {successMessage && (
+                        <div className="mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+                          {successMessage}
+                        </div>
+                      )}
                     </div>
                   </form>
                 </div>
@@ -353,7 +386,7 @@ function TestimonialsPage() {
                     to="/book-now"
                     className="bg-white text-primary px-8 py-4 rounded-full font-semibold hover:bg-stone-50 hover:scale-105 transition-all duration-300 shadow-lg inline-flex items-center justify-center"
                   >
-                    Let's get started
+                    Book Now
                   </NavLink>
                 </div>
               </div>

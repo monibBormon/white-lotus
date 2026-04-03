@@ -7,12 +7,13 @@ function ProductsPage() {
     {
       id: 1,
       title: "One on One Session",
-      price: "£80",
+      price: "80",
+      mainPrice:"150",
       image:
         "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=600&h=400&fit=crop",
       details: [
         "We will connect with you over the phone, allowing you to receive healing from the comfort of your home, anywhere in the world. Each session lasts approximately one hour.",
-        "Using a kinesiology pendulum and specialized charts, we access the information needed to support your healing process. This approach allows us to quickly tap into the subconscious mind and your soul's records.",
+        "Using a kinesiology pendulum and specialized charts, we access the information needed to support your healing process. This approach allows us to quickly tap into the subconscious mind and your soul's akashic records.",
         "We connect with the Creator, Universe, Source, God whatever resonates most with you. This practice helps you align with that higher energy and create a safe, supportive space for healing.",
         "Through the use of specific charts, we communicate directly with your energy to identify imbalances on all levels soul, body, mind, and emotions—recognizing that we are all made of energy.",
         "This process facilitates the retrieval of essential insights while gently uncovering and releasing energetic blockages. When practiced correctly, it encourages deep healing and harmonizes all dimensions of your being.",
@@ -21,13 +22,11 @@ function ProductsPage() {
     {
       id: 2,
       title: "Tantric Hawan sacred Fire Ceremony",
-      price: "£100",
+      price: "100",
+      mainPrice:"200",
       image: moonImg,
       details: [
-        "The Tantric Hawan is an ancient and deeply sacred fire ritual where powerful mantras and divine offerings are made into the holy fire, awakening potent spiritual energies.",
-        "When combined with deep healing practices, this ceremony becomes incredibly powerful, clearing heavy energies, releasing deep blockages, and activating profound healing on an energetic and spiritual level.",
-        "The sacred fire amplifies intentions, purifies the energy field, and opens the path for transformation, protection, and abundance.","This process unlocks profound insight while effortlessly dissolving energetic blockages at their core. When practiced with intention and precision, it becomes a powerful catalyst for deep, transformative healing realigning, restoring, and harmonizing every dimension of your being.",
-        "A powerful experience for those ready to cleanse, heal, and step into a higher vibration.",
+        "The Tantric Hawan is an ancient and deeply sacred fire ritual where powerful mantras and divine offerings are made into the holy fire, awakening potent spiritual energies.","When combined with deep healing practices, this ceremony works to clear heavy energies, release blockages, and activate healing on an energetic and spiritual level.","The sacred fire amplifies intention, purifies the energy field, and opens the path for transformation, protection, and abundance.","This process brings insight while dissolving blockages at their core. Practiced with intention and precision, it becomes a catalyst for true inner change—realigning, restoring, and harmonising every dimension of your being.","A deeply immersive experience for those ready to cleanse, heal, and step into a higher vibration.",
       ],
     },
   ];
@@ -70,7 +69,7 @@ function ProductsPage() {
                     </p>
                   )}
                   <div className="text-2xl md:text-3xl font-bold text-primary mb-4">
-                    {product.price} <del>£150</del>
+                    £{product.price} <del className="text-[#8d3a86]">£{product.mainPrice}</del>
                   </div>
 
                   <p className="text-stone-700 dark:text-gray-300 mb-6 leading-relaxed">

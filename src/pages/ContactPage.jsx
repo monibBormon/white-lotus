@@ -20,16 +20,16 @@ function ContactPage() {
             </p>
             <div className="text-stone-700 mb-8">
               <p className="mb-2">
-                The energy exchange for healing sessions is <span className="font-bold">£80</span> an hour.
+                The energy exchange for healing sessions is <span className="font-bold">£80 <del className="text-gray-500">£150</del></span> an hour.
               </p>
-              <p className="mb-2">Tantric Hawan sacred fire ceremony <span className="font-bold">£100</span>.</p>
+              <p className="mb-2">Tantric Hawan sacred fire ceremony <span className="font-bold">£100 <del className="text-gray-500">£200</del></span>.</p>
               <p>Services are available globally.</p>
             </div>
             <Link
               to="/book-now"
               className="inline-block bg-primary hover:bg-pink-400 text-white font-bold py-4 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 text-lg"
             >
-              Let's Get Started
+              Book Now
             </Link>
           </div>
         </section>

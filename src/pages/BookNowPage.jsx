@@ -3,7 +3,7 @@ import Layout from "../components/shared/layout";
 
 function BookNowPage() {
     return ( <Layout>
-        <div className="py-8">
+        <div className="py-8 mt-8">
             <BookingForm/>
         </div>
     </Layout> );

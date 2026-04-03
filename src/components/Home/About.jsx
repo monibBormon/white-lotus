@@ -22,33 +22,47 @@ function About() {
 
           <div className="order-1 md:order-2 space-y-6 text-stone-700 leading-relaxed">
             <p>
-              For much of my life, I sensed an unseen barrier holding me back,
-              though I could not fully identify its source. In 2017, that began
-              to shift. During a shamanic healing session, a practitioner
-              identified an energetic block within me, an insight that marked
-              the start of a profound journey of self-discovery and healing.
+              For years, I felt held back by something I couldn’t fully
+              explain—a pattern that kept me stuck, disconnected, and unable to
+              step into my full potential.
             </p>
             <p>
-              Through years of dedicated exploration into energy healing
-              practices and spiritual modalities, I uncovered the origin of this
-              block, which had been placed in early childhood by my family.
-              Though unintentional, it created a barrier that limited my ability
-              to access my true gifts.
+              In 2017, everything began to change. Through a powerful healing
+              experience, I became aware of a deep-rooted internal block formed
+              in early life—one that had been shaping my thoughts, behaviours,
+              and sense of self for years.
             </p>
             <p>
-              With persistence, study, and the support of a strong community, I
-              was able to gradually release this barrier. I had fully cleared
-              it, reconnecting with the Creator and unlocking the ability to
-              channel energy in its purest form. This breakthrough not only
-              deepened my own spiritual alignment but also strengthened my
-              capacity to serve as a healer for others.
+              That moment sparked a journey of transformation. I immersed myself
+              in energy work, personal development, and spiritual practices,
+              committed to understanding and releasing the patterns that were
+              holding me back.
             </p>
             <p>
-              Today, I integrated my lived experience, formal spiritual
-              training, and natural channeling abilities to guide and empower
-              individuals on their own paths of growth and transformation. My
-              mission is clear: to help people achieve alignment, fulfillment,
-              happiness and well being across all areas of life.
+              Over time, I didn’t just create change—I experienced a complete
+              shift in how I think, feel, and show up in life. I developed a
+              strong sense of clarity, confidence, and connection, along with
+              the ability to work deeply with others on their own
+              transformation.
+            </p>
+            <p>
+              Now, I help people who feel stuck, overwhelmed, or disconnected
+              break through their own internal barriers and step into a more
+              aligned, confident, and fulfilling life.
+            </p>
+            <p>
+              Through my work, I combine lived experience, proven techniques,
+              and intuitive insight to help you:
+            </p>
+            <ul>
+              <li>– Release limiting patterns and emotional blocks</li>
+              <li>– Reconnect with your true self and direction</li>
+              <li>Build confidence, clarity, and inner balance</li>
+              <li>Create lasting, meaningful change in your life</li>
+            </ul>
+            <p>
+              If you’re ready to move forward and become the version of yourself
+              you know you’re capable of being, I’m here to guide you.
             </p>
           </div>
         </div>
